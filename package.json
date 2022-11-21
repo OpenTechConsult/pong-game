@@ -1,0 +1,28 @@
+{
+  "name": "pong-game",
+  "version": "1.0.0",
+  "description": "A HTML 5 multi-player pong game using  Node.js and Socket.io",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenTechConsult/pong-game.git"
+  },
+  "keywords": [],
+  "author": "Elom Atsou Agboka <opentech.consult@gmail.com> (https://github.com/OpenTechConsult)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OpenTechConsult/pong-game/issues"
+  },
+  "homepage": "https://github.com/OpenTechConsult/pong-game#readme",
+  "dependencies": {
+    "socket.io": "^4.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

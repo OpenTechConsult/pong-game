@@ -1,6 +1,7 @@
 // Canvas related
 const canvas = document.createElement('canvas')
 const context = canvas.getContext('2d')
+const socket = io('http://localhost:3000')
 let paddleIndex = 0
 
 let width = 500
@@ -11,6 +12,7 @@ let paddleHeight = 10
 let paddleWidth = 50
 let paddleDiff = 25
 let paddleX = [225, 225]
+let trajectoryX = [0, 0]
 let playerMoved = false
 
 // ball
@@ -20,13 +22,11 @@ let ballRadius = 5
 let ballDirection = 1
 
 // speed
-let speedX = 2
-let speedY = 0
-let computerSpeed = 4
+let speedY = 2
+let speedX = 0
 
 // score for both players
 let score = [0, 0]
-
 
 
 // create Canvas Element
@@ -37,6 +37,18 @@ function createCanvas() {
 
     document.body.appendChild(canvas)
     renderCanvas()
+}
+
+// Wait for Opponents
+function renderIntro() {
+    // Canvas background
+    context.fillStyle = 'black'
+    context.fillRect(0, 0, width, height)
+
+    // Intro text
+    context.fillStyle = 'white'
+    context.font = "32px Courier New"
+    context.fillText("Waiting for opponent...", 20, (canvas.height / 2) - 30)
 }
 
 // Render everything on canvas
@@ -74,14 +86,14 @@ function renderCanvas() {
     context.fillText(score[1], 20, (canvas.height / 2) - 30)
 }
 
-// ball reset to center
+//reset ball to center
 function ballReset() {
     ballX = width / 2
     ballY = height / 2
     speedY = 3
 }
 
-// ballMove()
+// Adjust ball Movement
 function ballMove() {
     // vertical speed
     ballY += speedY * ballDirection
@@ -141,35 +153,14 @@ function ballBoundaries() {
             speedX = trajectoryX[1] * 0.3
         } else {
             // Reset ball, Increase computer difficulty, add to player score.
-            if (computerSpeed < 6) {
-                computerSpeed += 0.5
-            }
             ballReset()
             score[0]++
         }
     }
 }
 
-// computer movement
-function computerAI() {
-    if (playerMoved) {
-        if (paddleX[1] + paddleDiff < ballX) {
-            paddleX[1] += computerSpeed
-        } else {
-            paddleX[1] -= computerSpeed
-        }
-
-        if (paddleX[1] < 0) {
-            paddleX[1] = 0
-        } else if (paddleX[1] > (width - paddleWidth)) {
-            paddleX[1] = width - paddleWidth
-        }
-    }
-}
-
 // Called every frame
 function animate() {
-    computerAI()
     ballMove()
     renderCanvas()
     ballBoundaries()
@@ -179,7 +170,7 @@ function animate() {
 // start game, reset everything
 function startGame() {
     createCanvas()
-
+    renderIntro()
     paddleIndex = 0
     window.requestAnimationFrame(animate)
     canvas.addEventListener('mousemove', (e) => {
