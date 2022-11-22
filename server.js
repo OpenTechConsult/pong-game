@@ -20,8 +20,14 @@ io.on('connection', (socket) => {
         console.log('Player ready', socket.id)
         readyPlayerCount += 1
         if (readyPlayerCount === 2) {
-            // broadcast('startGame')
+            // broadcast('startGame') to every client connected
             io.emit('startGame', socket.id)
         }
+    })
+
+    // listen to the 'paddleMove' event and broadcast the 'paddleMove' event
+    // to all clients except the one that originally send it.
+    socket.on('paddleMove', (paddleData) => {
+        socket.broadcast.emit('paddleMove', paddleData)
     })
 })
